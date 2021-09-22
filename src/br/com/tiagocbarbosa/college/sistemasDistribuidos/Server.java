@@ -42,9 +42,6 @@ public class Server {
                             String[] request = input.split(":");
 
                             if (request[0].equals("PROFESSOR")) {
-                                // Criando instância do formatador de data e hora
-                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-
                                 if (request[1].equals("INICIAR")) {
                                     position = findPosition(presencas, request[2]);
 
@@ -53,7 +50,7 @@ public class Server {
 
                                         presencas.get(presencas.size() - 1).add(request[2]);
 
-                                        String formattedDateTime = LocalDateTime.now().format(formatter);
+                                        String formattedDateTime = getDataHoraAtual();
 
                                         out.println(String.format("%s, aberta a chamada da turma: %s", formattedDateTime, request[2]));
                                         System.out.println(String.format("%s, aberta a chamada da turma: %s", formattedDateTime, request[2]));
@@ -73,7 +70,7 @@ public class Server {
 
                                     presencasConfirmadas = listarPresentes(presencas, position);
 
-                                    String formattedDateTime = LocalDateTime.now().format(formatter);
+                                    String formattedDateTime = getDataHoraAtual();
 
                                     out.println(String.format("%s, encerrada a chamada da turma: %s. Presenças confirmadas: %s", formattedDateTime, request[2], presencasConfirmadas));
                                     System.out.println(String.format("%s, encerrada a chamada da turma: %s. Presenças confirmadas: %s", formattedDateTime, request[2], presencasConfirmadas));
@@ -87,8 +84,15 @@ public class Server {
                                 if (position != -1) {
                                     status = confirmarPresenca(presencas, position, request[1]);
 
-                                    out.println("Confirmação de presença: " + input + " status: " + status);
-                                    System.out.println("Confirmação de presença: " + input + " status: " + status);
+                                    if(!status) {
+                                        out.println("Confirmação de presença: " + input + " status: JÁ EXISTE PRESENÇA PARA ESSA MATRÍCULA!");
+                                        System.out.println("Confirmação de presença: " + input + " status: JÁ EXISTE PRESENÇA PARA ESSA MATRÍCULA!");
+                                    } else {
+                                        String fomattedDateTime = getDataHoraAtual();
+
+                                        out.println(String.format("%s, confirmação de presença %s status: %s", fomattedDateTime, input, status));
+                                        System.out.println(String.format("%s, confirmação de presença %s status: %s", fomattedDateTime, input, status));
+                                    }
                                 } else {
                                     out.println("Confirmação de presença: " + input + " status: TURMA NÃO ENCONTRADA!");
                                     System.out.println("Confirmação de presença: " + input + " status: TURMA NÃO ENCONTRADA!");
@@ -135,6 +139,14 @@ public class Server {
                     if (!exists)
                         return presencas.get(position).add(matricula);
                     return false;
+                }
+
+                private String getDataHoraAtual() {
+                    // Definindo o formato da data e hora
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
+                    // Retornando a data e hora atual no formato definido
+                    return LocalDateTime.now().format(formatter);
                 }
             };
             t.start();
