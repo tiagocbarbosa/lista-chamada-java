@@ -7,7 +7,6 @@ import java.net.Socket;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.Scanner;
 
 public class Server {
@@ -65,19 +64,22 @@ public class Server {
                                 } else if (request[1].equals("LISTAR")) {
                                     position = findPosition(presencas, request[2]);
 
-                                    presencasConfirmadas = presencasConfirmadas(presencas, position);
+                                    presencasConfirmadas = listarPresentes(presencas, position);
 
-                                    out.println("Turma: " + request[2] + " Presenças confirmadas: " + presencasConfirmadas);
-                                    System.out.println("Turma: " + request[2] + " Presenças confirmadas: " + presencasConfirmadas);
+                                    out.println("Turma: " + request[2] + ". Presenças confirmadas: " + presencasConfirmadas);
+                                    System.out.println("Turma: " + request[2] + ". Presenças confirmadas: " + presencasConfirmadas);
                                 } else if (request[1].equals("ENCERRAR")) {
                                     position = findPosition(presencas, request[2]);
 
-                                    presencas.remove(position);
+                                    presencasConfirmadas = listarPresentes(presencas, position);
 
                                     String formattedDateTime = LocalDateTime.now().format(formatter);
 
-                                    out.println(String.format("%s, encerrada a chamada da turma: %s", formattedDateTime, request[2]));
-                                    System.out.println(String.format("%s: encerrada a chamada da turma: %s", formattedDateTime, request[2]));
+                                    out.println(String.format("%s, encerrada a chamada da turma: %s. Presenças confirmadas: %s", formattedDateTime, request[2], presencasConfirmadas));
+                                    System.out.println(String.format("%s, encerrada a chamada da turma: %s. Presenças confirmadas: %s", formattedDateTime, request[2], presencasConfirmadas));
+
+                                    // Remove a chamada da lista de chamadas/presenças
+                                    presencas.remove(position);
                                 }
                             } else if (request[0].equals("ALUNO")) {
                                 position = findPosition(presencas, request[2]);
@@ -109,7 +111,7 @@ public class Server {
                     return position;
                 }
 
-                private String presencasConfirmadas(ArrayList<ArrayList<String>> presencas, int position) {
+                private String listarPresentes(ArrayList<ArrayList<String>> presencas, int position) {
                     ArrayList<String> presentes = presencas.get(position);
                     StringBuilder alunosPresentes = new StringBuilder();
 
