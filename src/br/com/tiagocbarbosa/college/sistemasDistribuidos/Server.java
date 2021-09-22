@@ -32,7 +32,6 @@ public class Server {
                             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                             Scanner in = new Scanner(clientSocket.getInputStream());
                     ) {
-                        // DÚVIDA: em que momento o input pode receber a string "exit"?
                         while (in.hasNextLine()) {
                             String input = in.nextLine();
                             if (input.equalsIgnoreCase("exit")) {
