@@ -93,8 +93,10 @@ public class Server {
                                         System.out.println(String.format("%s, confirmação de presença %s status: %s", fomattedDateTime, input, status));
                                     }
                                 } else {
-                                    out.println("Confirmação de presença: " + input + " status: TURMA NÃO ENCONTRADA!");
-                                    System.out.println("Confirmação de presença: " + input + " status: TURMA NÃO ENCONTRADA!");
+                                    String fomattedDateTime = getDataHoraAtual();
+
+                                    out.println(String.format("%s, confirmação de presença %s status: TURMA NÃO ENCONTRADA!", fomattedDateTime, input));
+                                    System.out.println(String.format("%s, confirmação de presença %s status: TURMA NÃO ENCONTRADA!", fomattedDateTime, input));
                                 }
                             }
                             System.out.println(presencas);
