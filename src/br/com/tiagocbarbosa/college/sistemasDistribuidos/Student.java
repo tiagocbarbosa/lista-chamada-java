@@ -23,14 +23,17 @@ public class Student {
                 Scanner s = new Scanner(System.in);
         ) {
             while (true) {
+                // solicitar número da matrícula
                 while (matricula.trim().equals("")) {
                     System.out.print("Informa o número da sua Matrícula: ");
                     matricula = s.nextLine();
                 }
+                // solicitar código da turma
                 while (turma.trim().equals("")) {
                     System.out.print("Informa o código da sua Turma: ");
                     turma = s.nextLine();
                 }
+                // printar informações do aluno
                 out.println("ALUNO:" + matricula + ":" + turma);
                 System.out.println(in.nextLine());
                 break;

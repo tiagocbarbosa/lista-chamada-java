@@ -40,59 +40,75 @@ public class Server {
 
                             String[] request = input.split(":");
 
+                            // análises com o PROFESSOR
                             if (request[0].equals("PROFESSOR")) {
                                 if (request[1].equals("INICIAR")) {
                                     position = findPosition(presencas, request[2]);
 
+                                    // exibir a abertura da chamada pelo professor
                                     if (position == -1) {
                                         presencas.add(new ArrayList<String>());
-
                                         presencas.get(presencas.size() - 1).add(request[2]);
-
                                         String formattedDateTime = getDataHoraAtual();
 
                                         out.println(String.format("%s, aberta a chamada da turma: %s", formattedDateTime, request[2]));
                                         System.out.println(String.format("%s, aberta a chamada da turma: %s", formattedDateTime, request[2]));
-                                    } else {
+                                    }
+
+                                    // exibir mensagem de turma existente
+                                    else {
                                         out.println("TURMA-JA-REGISTRADA");
                                         System.out.println("A turma: " + request[2] + " já existe!");
                                     }
-                                } else if (request[1].equals("LISTAR")) {
-                                    position = findPosition(presencas, request[2]);
+                                }
 
+                                // LISTAR as presenças confirmadas
+                                else if (request[1].equals("LISTAR")) {
+                                    position = findPosition(presencas, request[2]);
                                     presencasConfirmadas = listarPresentes(presencas, position);
 
                                     out.println("Turma: " + request[2] + ". Presenças confirmadas: " + presencasConfirmadas);
                                     System.out.println("Turma: " + request[2] + ". Presenças confirmadas: " + presencasConfirmadas);
-                                } else if (request[1].equals("ENCERRAR")) {
+                                }
+
+                                // ENCERRAR a chamada aberta
+                                else if (request[1].equals("ENCERRAR")) {
                                     position = findPosition(presencas, request[2]);
-
                                     presencasConfirmadas = listarPresentes(presencas, position);
-
                                     String formattedDateTime = getDataHoraAtual();
 
                                     out.println(String.format("%s, encerrada a chamada da turma: %s. Presenças confirmadas: %s", formattedDateTime, request[2], presencasConfirmadas));
                                     System.out.println(String.format("%s, encerrada a chamada da turma: %s. Presenças confirmadas: %s", formattedDateTime, request[2], presencasConfirmadas));
 
-                                    // Remove a chamada da lista de chamadas/presenças
+                                    // remove a chamada da lista de chamadas/presenças
                                     presencas.remove(position);
                                 }
-                            } else if (request[0].equals("ALUNO")) {
+                            }
+
+                            // análises com o ALUNO
+                            else if (request[0].equals("ALUNO")) {
                                 position = findPosition(presencas, request[2]);
 
                                 if (position != -1) {
                                     status = confirmarPresenca(presencas, position, request[1]);
 
+                                    // exibir mensagem caso possuir presença para a matrícula
                                     if(!status) {
                                         out.println("Confirmação de presença: " + input + " status: JÁ EXISTE PRESENÇA PARA ESSA MATRÍCULA!");
                                         System.out.println("Confirmação de presença: " + input + " status: JÁ EXISTE PRESENÇA PARA ESSA MATRÍCULA!");
-                                    } else {
+                                    }
+
+                                    // exibir mensagem de presença
+                                    else {
                                         String fomattedDateTime = getDataHoraAtual();
 
                                         out.println(String.format("%s, confirmação de presença %s status: %s", fomattedDateTime, input, status));
                                         System.out.println(String.format("%s, confirmação de presença %s status: %s", fomattedDateTime, input, status));
                                     }
-                                } else {
+                                }
+
+                                // exibir mensagem caso a turma não exista
+                                else {
                                     String fomattedDateTime = getDataHoraAtual();
 
                                     out.println(String.format("%s, confirmação de presença %s status: TURMA NÃO ENCONTRADA!", fomattedDateTime, input));
@@ -106,6 +122,7 @@ public class Server {
                     }
                 }
 
+                // busca POSIÇÃO da turma na lista
                 private int findPosition(ArrayList<ArrayList<String>> presencas, String turma) {
                     int position = -1;
 
@@ -116,6 +133,7 @@ public class Server {
                     return position;
                 }
 
+                // LISTAR as presenças das matrículas
                 private String listarPresentes(ArrayList<ArrayList<String>> presencas, int position) {
                     ArrayList<String> presentes = presencas.get(position);
                     StringBuilder alunosPresentes = new StringBuilder();
@@ -127,6 +145,7 @@ public class Server {
                     return alunosPresentes.toString();
                 }
 
+                // analisa se existe a PRESENÇA na chamada
                 private boolean confirmarPresenca(ArrayList<ArrayList<String>> presencas, int position, String matricula) {
                     ArrayList<String> presentes = presencas.get(position);
                     boolean exists = false;
@@ -142,11 +161,10 @@ public class Server {
                     return false;
                 }
 
+                // retorna DATA e HORA atual
                 private String getDataHoraAtual() {
-                    // Definindo o formato da data e hora
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-                    // Retornando a data e hora atual no formato definido
                     return LocalDateTime.now().format(formatter);
                 }
             };

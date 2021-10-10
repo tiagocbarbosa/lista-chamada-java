@@ -23,6 +23,7 @@ public class Teacher {
                 Scanner s = new Scanner(System.in);
         ) {
             while (true) {
+                // solicitar LISTAR ou ENCERRAR a chamada
                 while ((!status.trim().equals("FIM")) && (!turma.trim().equals(""))) {
                     System.out.print("Digite LISTAR para ver uma listagem dos alunos com presença confirmada ou FIM para encerrar a chamada: ");
                     status = s.nextLine();
@@ -35,6 +36,7 @@ public class Teacher {
                         System.out.println(in.nextLine());
                     }
                 }
+                // solicitar o código da turma
                 while (turma.trim().equals("")) {
                     System.out.print("Informa o código da sua Turma: ");
                     turma = s.nextLine();
